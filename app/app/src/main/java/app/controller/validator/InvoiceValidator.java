@@ -1,0 +1,25 @@
+package app.controller.validator;
+
+import org.springframework.stereotype.Component;
+
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Component
+@Getter
+@Setter
+@NoArgsConstructor
+public class InvoiceValidator extends CommonsValidator {
+	
+
+	
+	public void validItems(String items) throws Exception {
+		super.isValidString("Items de la factura", items);
+	}
+	
+	public double validTotal(String total) throws Exception {
+		return super.isValidDouble("El total de la factura", total);
+	}
+
+}
