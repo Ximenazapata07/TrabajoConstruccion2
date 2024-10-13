@@ -14,6 +14,10 @@ import app.dto.UserDto;
 import app.service.ClubService;
 import app.service.interfaces.PartherService;
 import app.controller.validator.InvoiceValidator;
+import app.dto.InvoiceDetailDto;
+import app.dto.PartherDto;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -28,7 +32,7 @@ public class PartherController implements ControllerInterface{
 	private PersonValidator personValidator;
 	@Autowired
 	private UserValidator userValidator;
-	
+	@Autowired
 	private InvoiceValidator invoiceValidator;
 	@Autowired 
 	private PartherService service;
@@ -36,7 +40,7 @@ public class PartherController implements ControllerInterface{
 	
 	
 	
-	private static final String MENU= "ingrese la opcion que desea \n 1.Para consultar tus fondos e incrementar  \n 2. Para realizar pedidos\n 3. Para crear invitados \n 4. Desactivar invitados \n  5.cerrar sesion ";
+	private static final String MENU= "ingrese la opcion que desea \n 1.Para consultar tus fondos e incrementar  \n 2. Para realizar facturas \n 3. Para crear invitados \n 4. Desactivar invitados \n  5.cerrar sesion ";
 	private static final String MENU2= "Ingrese la opcion que desea \n 1. para consultar fondos \n 2. para incremento de fondos \n 3. para volver al menu principal";
 	
 	@Override 
@@ -196,18 +200,20 @@ public class PartherController implements ControllerInterface{
 	
 	
 	public void billing () throws Exception{
-		System.out.print("Descripcion de los productos");
-		String validIntems= Utils.getReader().nextLine();
-		invoiceValidator.validItems(validIntems);
-		System.out.println("Ingrese el monto de la factura");
-		double Total= invoiceValidator.validTotal(Utils.getReader().nextLine());
-		
-		
-		InvoiceDto invoiceDto =new InvoiceDto();
-		invoiceDto.setItems(validIntems);
-		invoiceDto.setTotal(Total);
-		
-		
+            /*
+	System.out.println("Ingrese el numero de elementos");
+        int items = invoiceValidator.validItem(Utils.getReader().nextLine());
+        List<InvoiceDetailDto> invoices = new ArrayList<InvoiceDetailDto>();
+        System.out.println("Ingrese el id de la factura");
+        long invoiceid = invoiceValidator.validId(Utils.getReader().nextLine());
+        InvoiceDetailDto invoiceDetailDto = new InvoiceDetailDto();
+        InvoiceDto invoiceDto = new InvoiceDto();
+        invoiceDetailDto.setInvoiceid(invoiceDto);
+        invoiceDetailDto.setItem(String.valueOf(items));
+        
+        
+                
+	*/	
 		
 	}
 

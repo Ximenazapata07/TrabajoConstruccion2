@@ -26,7 +26,7 @@ public class Person {
 	private long document;
 	@Column(name="name")
 	private String name;
-	@Column(name="cellnumber")
+	@Column(name="cellphone")
 	private long cellnumber;
 	
 

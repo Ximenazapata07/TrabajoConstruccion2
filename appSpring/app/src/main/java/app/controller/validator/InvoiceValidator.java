@@ -18,8 +18,16 @@ public class InvoiceValidator extends CommonsValidator {
 		super.isValidString("Items de la factura", items);
 	}
 	
-	public double validTotal(String total) throws Exception {
-		return super.isValidDouble("El total de la factura", total);
+	public double validAmount(String amount) throws Exception {
+		return super.isValidDouble("El total de la factura", amount);
 	}
+        
+        public int validItem(String items) throws Exception{
+            return super.isValidInteger("Items de la factura ", items);
+        }
+
+    public long validId(String nextLine) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 
 }

@@ -1,7 +1,6 @@
 package app.dao;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -41,18 +40,22 @@ public class PartherDaoImplementation implements PartherDao {
 	}
 	
 	@Override
-	public PartherDto existsById(PartherDto partherDto) throws Exception{
-		Parther parther = partherRepository.findById(partherDto.getId());
-		return Helper.parse(parther);
+	public boolean existsById(PartherDto partherDto) throws Exception{
+		return partherRepository.existsById(partherDto.getId());
 		
 	}
-	public PartherRepository getPartherRepository() {
-		return partherRepository;
-	}
-	public void setPartherRepository(PartherRepository partherRepository) {
-		this.partherRepository = partherRepository;
-	}
-        
+	
+       /* @Override
+        public PartherDto findById(PartherDto partherDto) throws Exception {
+            Parther parther = partherRepository.findById(partherDto.getId());
+            return Helper.parse(parther);
+    }
+*/
+
+    @Override
+    public PartherDto findById(PartherDto partherDto) throws Exception {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 	
 		
 		

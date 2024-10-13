@@ -23,9 +23,6 @@ public class Guest {
 	@Column(name="id")
 	private long id;
 	@OneToOne
-	@JoinColumn(name="personid")
-	private Person personId;
-	@OneToOne
 	@JoinColumn(name="userid")
 	private User userId;
 	@OneToOne

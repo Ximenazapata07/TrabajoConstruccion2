@@ -23,10 +23,7 @@ public class Parther {
 	@Id
 	@GeneratedValue(strategy= GenerationType.IDENTITY)
 	private long id;
-	@OneToOne
-	@JoinColumn(name="personid")
-	private Person personId;
-	@OneToOne
+        @OneToOne
 	@JoinColumn(name="userid")
 	private User userId;
 	@Column(name="amount")

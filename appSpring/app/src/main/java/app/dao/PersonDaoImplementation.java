@@ -31,6 +31,7 @@ public class PersonDaoImplementation implements PersonDao {
 	public void createPerson(PersonDto personDto) throws Exception {
 		Person person = Helper.parse(personDto);
 		personRepository.save(person);
+                personDto.setId(person.getId());
 		
 		
 	}
@@ -44,12 +45,7 @@ public class PersonDaoImplementation implements PersonDao {
 		Person person = personRepository.findByDocument(personDto.getDocument());
 		return Helper.parse(person);
 	}
-	public PersonRepository getPersonRepository() {
-		return personRepository;
-	}
-	public void setPersonRepository(PersonRepository personRepository) {
-		this.personRepository = personRepository;
-	}
+	
 	
 	
 	
