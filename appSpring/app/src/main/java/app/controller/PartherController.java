@@ -16,6 +16,7 @@ import app.service.interfaces.PartherService;
 import app.controller.validator.InvoiceValidator;
 import app.dto.InvoiceDetailDto;
 import app.dto.PartherDto;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
@@ -73,7 +74,7 @@ public class PartherController implements ControllerInterface{
 			
 		}
 		case "2":{
-			this.billing();
+			//this.billing();
 			return true;
 		}
 		case "3":{
@@ -198,26 +199,62 @@ public class PartherController implements ControllerInterface{
 		
 	}
 	
-	
+	/*
 	public void billing () throws Exception{
-            /*
-	System.out.println("Ingrese el numero de elementos");
+        System.out.println("Ingrese el numero de elementos");
         int items = invoiceValidator.validItem(Utils.getReader().nextLine());
         List<InvoiceDetailDto> invoices = new ArrayList<InvoiceDetailDto>();
-        System.out.println("Ingrese el id de la factura");
-        long invoiceid = invoiceValidator.validId(Utils.getReader().nextLine());
-        InvoiceDetailDto invoiceDetailDto = new InvoiceDetailDto();
         InvoiceDto invoiceDto = new InvoiceDto();
-        invoiceDetailDto.setInvoiceid(invoiceDto);
-        invoiceDetailDto.setItem(String.valueOf(items));
+        invoiceDto.setConsumptionDate(new Date(System.currentTimeMillis()));
         
         
-                
-	*/	
+        // asignar el partherId y el personId a la factura
+         invoiceDto.setPartherId(invoiceDto.getPartherId());
+         invoiceDto.setPersonId(invoiceDto.getPersonId());
+        
+        double total = 0;
+        
+        for(int i = 0; i < items; i++) {
+        	InvoiceDetailDto invoiceDetailDto = new InvoiceDetailDto();
+        	invoiceDetailDto.setInvoiceid(invoiceDto);
+        	invoiceDetailDto.setItem(i + 1);
+        	
+        	System.out.println("Ingrese la descripción del item");
+        	// agregar un validador para la descripción si es necesario
+            String description = Utils.getReader().nextLine();
+            
+            invoiceDetailDto.setDescription(description);
+            
+        	System.out.println("Ingrese el monto del item" + description);
+            double amount = invoiceValidator.validItem(Utils.getReader().nextLine());
+            
+            invoiceDetailDto.setAmount(amount);
+            invoices.add(invoiceDetailDto);
+            
+            total += invoiceDetailDto.getAmount();
+        }
+        
+        invoiceDto.setTotal(total);
+        
+        // llamar al club service para guardar el invoice
+        // clubService.createInvoice(invoiceDto)
+        
+        // debes crear otro método en clubService para guardar los invoice details
+        // puede ser que reciba una lista así
+        // clubService.createInvoiceDetails(invoices)
+        
+        // o que reciba solo un dto y lo harías en un for
+        /*
+        for(InvoiceDetailDto invoiceDetail: invoices) {
+        	//clubService.createInvoiceDetail(invoiceDetail)
+        
+	
+        
+        
+        }
+*/
+        }     
 		
-	}
-
 	
 	
 	
-}

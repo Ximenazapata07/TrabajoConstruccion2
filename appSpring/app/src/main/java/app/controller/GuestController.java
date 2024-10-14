@@ -40,10 +40,21 @@ public class GuestController implements ControllerInterface {
 	public boolean options( String option) throws Exception{
 		switch (option) {
 		case "1": {
+                    return true;
+		}
+                
+                case "2":{
+                    return true;
+                }
+                case "3":{
+                    
+                    return false;
+                }
+                default:
+                    System.out.println("Ingrese una opcion valida");
+			return true;
+		}
 		
-		}
-		}
-		return true;
 	}
 
 	public InvoiceValidator getInvoiceValidator() {

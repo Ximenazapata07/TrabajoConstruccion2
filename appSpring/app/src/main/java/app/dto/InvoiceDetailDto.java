@@ -19,13 +19,9 @@ import lombok.Setter;
 @NoArgsConstructor
 
 public class InvoiceDetailDto {
-    
     private long id;
-    
     private InvoiceDto invoiceid;
-    
     private int item;
-    
     private double amount;
-       
+    private String description;
 }

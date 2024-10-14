@@ -19,7 +19,6 @@ public class InvoiceDto {
 	private Date consumptionDate;
 	private double total;
 	private boolean status;
-	private String items;
 	
 	
 }

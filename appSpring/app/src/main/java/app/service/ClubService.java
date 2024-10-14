@@ -5,26 +5,24 @@ import java.sql.SQLException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import app.dao.PersonDaoImplementation;
-import app.dao.UserDaoImplementation;
+
 import app.dao.interfeces.GuestDao;
 import app.dao.interfeces.InvoiceDao;
 import app.dao.interfeces.PartherDao;
 import app.dao.interfeces.PersonDao;
 import app.dao.interfeces.UserDao;
 import app.dto.GuestDto;
+import app.dto.InvoiceDetailDto;
 import app.dto.InvoiceDto;
 import app.dto.PartherDto;
 import app.dto.PersonDto;
 import app.dto.UserDto;
-import app.helpers.Helper;
-import app.model.Guest;
-import app.model.Parther;
+
 import app.service.interfaces.AdminService;
 import app.service.interfaces.LoginService;
 import app.service.interfaces.PartherService;
-import app.dao.GuestDaoImplementation;
-import app.dao.PartherDaoImplementation;
+import java.util.List;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -56,9 +54,10 @@ public class ClubService implements LoginService,AdminService,PartherService{
 		guestDto.getUserId().setPersonId(this.personDao.findByDocument(guestDto.getUserId().getPersonId()));
 		this.userDao.createUser(guestDto.getUserId());
 		UserDto userDto= userDao.findByUserName(guestDto.getUserId());
-		guestDto.setUserId(userDto);
-                //va el id del socio 
-                //guestDto.setPartherId(this.partherDao.existsById(user));
+                PartherDto parther = new PartherDto();
+                parther.setUserId(user);
+                guestDto.setUserId(userDto);
+                guestDto.setPartherId(this.partherDao.findByUserId(parther));
 		try {
 			
 			this.guestDao.createGuest(guestDto);
@@ -69,11 +68,7 @@ public class ClubService implements LoginService,AdminService,PartherService{
 		}
 		
 	}
-	@Override
-	public void createInvoice(InvoiceDto invoiceDto) throws Exception {
-		// TODO Auto-generated method stub
-		
-	}
+	
 	@Override
 	public void createParther(PartherDto partherDto) throws Exception{
 		this.personDao.createPerson(partherDto.getUserId().getPersonId());
@@ -118,8 +113,24 @@ public class ClubService implements LoginService,AdminService,PartherService{
 		user=null;
 		System.out.println("Se ha cerrado sesion");
 		
-	}
+        }
+        /*
+    @Override
+    public void createInvoice(List<InvoiceDetailDto> invoices) throws Exception {
+        InvoiceDetailDto invoiceDetailDto = invoiceDao.findById(invoices.get(0).getInvoiceid().getPersonId());
+        if (invoiceDetailDto == null){
+            throw new Exception("La orden no existe ");
+            
+        }
+        
+    }
+    
+*/
 
+    @Override
+    public void createInvoice(List<InvoiceDetailDto> invoices) throws Exception {
+       
+    }
 	
 	
 }

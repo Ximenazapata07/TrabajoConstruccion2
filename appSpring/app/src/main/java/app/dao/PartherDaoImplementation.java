@@ -45,17 +45,21 @@ public class PartherDaoImplementation implements PartherDao {
 		
 	}
 	
-       /* @Override
+        @Override
         public PartherDto findById(PartherDto partherDto) throws Exception {
             Parther parther = partherRepository.findById(partherDto.getId());
             return Helper.parse(parther);
     }
-*/
 
     @Override
-    public PartherDto findById(PartherDto partherDto) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public PartherDto findByUserId(PartherDto partherDto) throws Exception {
+      User user = Helper.parse(partherDto.getUserId());
+      Parther parther = partherRepository.findByUserId(user);
+      return Helper.parse(parther);
     }
+
+
+    
 	
 		
 		
