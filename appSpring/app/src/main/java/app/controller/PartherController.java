@@ -1,5 +1,6 @@
 package app.controller;
 
+import app.controller.requests.CreateGuestRequests;
 import java.util.Scanner;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,10 @@ import java.util.List;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 
 @Controller
@@ -38,113 +43,20 @@ public class PartherController implements ControllerInterface{
 	@Autowired 
 	private PartherService service;
 	
-	
-	
-	
-	private static final String MENU= "ingrese la opcion que desea \n 1.Para consultar tus fondos e incrementar  \n 2. Para realizar facturas \n 3. Para crear invitados \n 4. Desactivar invitados \n  5.cerrar sesion ";
-	private static final String MENU2= "Ingrese la opcion que desea \n 1. para consultar fondos \n 2. para incremento de fondos \n 3. para volver al menu principal";
+
 	
 	@Override 
 	public void session() throws Exception {
-		boolean session = true ;
-		while(session) {
-			session= menu();
-			
-		}
+	
 	}
-	private boolean menu() {
-		try {
-			System.out.println(MENU);
-			String option= Utils.getReader().nextLine();
-			return options(option);
-			
-			
-		}catch (Exception e) {
-			System.out.println(e.getMessage());
-			return true;
-		}
-		
-		
-	}
-	private boolean options(String option) throws Exception {
-		switch (option) {
-		case "1":{
-			this.menu2();
-			return true ;
-			
-		}
-		case "2":{
-			//this.billing();
-			return true;
-		}
-		case "3":{
-			this.createGuest();
-			return true;
-		}
-		case "4":{
-			//this.removerGuest();
-		}
-		case "5":{
-			System.out.println("Se ha cerrado seccion");
-			return false;
-			}
-		default :
-			System.out.println("Ingrese una opcion valida");
-			return true;
-			
-		}
-		
-		
-			
-			
-		}
+	
 
 
 	
 	
-	private boolean menu2() {
-		try {
-			System.out.println(MENU2);
-			String option2= Utils.getReader().nextLine();
-			return options(option2);
-			
-			
-		}catch (Exception e) {
-			System.out.println(e.getMessage());
-			return true;
-		}
-		}
 	
-	//poner la opcion 3 , aun nose como puedo obtener el saldo 
-	private boolean availableFunds(String opcion2)throws Exception {
-		boolean session2=true;
-		while(session2) {
-			session2=menu2();
-		}
-		switch (opcion2) {
-		case "1":{
-			//System.out.println("saldo actual: "+ obtenersaldo());
-			return true;
-		}
-		case"2":{
-			System.out.println("Ingresa la cantidad a agragar : $");
-			//long amount= Scanner.nextlong();
-			
-			//obtenersaldo.add(amount);
-			System.out.println("Fondos agregados exitosamente.");
-			return true;
-			
-		}
-		case"3":{
-			return false;
-		}
-		default:
-			System.out.println("Ingrese una opcion valida");
-			return true;
-			
-				
-	}
-}
+	
+	
 	//cosa que va en el service 
 	/*
 	public void add(long amount) {
@@ -154,22 +66,20 @@ public class PartherController implements ControllerInterface{
 		System.out.println("La cantidad debe ser mayor a cero");
 	}
 	
-}*/
-	public void createGuest() throws Exception {
-		System.out.println("Ingrese el nombre del invitado");
-		String name= Utils.getReader().nextLine();
+}*/     
+        @PostMapping("/guest")
+	private ResponseEntity createGuest(@RequestBody CreateGuestRequests requestGuest) {
+            
+                try{
+		String name= requestGuest.getName();
 		personValidator.validName(name);
-		System.out.println("Ingrese el documento del invitado");
-		long document= personValidator.validDocument(Utils.getReader().nextLine());
-		System.out.println("Ingrese el numero de telefono del invitado");
-		long cellnumber= personValidator.validCellnumber(Utils.getReader().nextLine());
+		long document= personValidator.validDocument(requestGuest.getDocument());
+		long cellnumber= personValidator.validCellnumber(requestGuest.getCellphone());
 		
-		
-		System.out.println("Ingrese el nombre de usuario del invitado");
-		String userName=Utils.getReader().nextLine();
+		String userName=requestGuest.getUserName();
 		userValidator.validUserName(userName);
-		System.out.println("Ingrese la contraseña del invitado");
-		String password=Utils.getReader().nextLine();
+		
+		String password=requestGuest.getPassword();
 		userValidator.validPassword(password);
 		
 		
@@ -177,7 +87,7 @@ public class PartherController implements ControllerInterface{
 		personDto.setName(userName);
 		personDto.setDocument(document);
 		personDto.setCellnumber(cellnumber);
-		
+		  
 		
 		
 		UserDto userDto = new UserDto();
@@ -190,16 +100,25 @@ public class PartherController implements ControllerInterface{
 		GuestDto guestDto = new GuestDto();
 		guestDto.setGuestStatus(true);
 		guestDto.setUserId(userDto);
+                
+                PartherDto partherDto = new PartherDto();
+                partherDto.setId(personValidator.isValidLong("Id del socio", requestGuest.getPartherId()));
+                guestDto.setPartherId(partherDto);
+                
+                
+                
 	
 		this.service.createGuest(guestDto);
-		System.out.println("Usuario creado exitosamente");
-		
+		return new ResponseEntity<>("Se ha creado el invitado exitosamente",HttpStatus.OK);
+                }catch (Exception e){
+                    return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+                }
 		
 		
 		
 	}
 	
-	/*
+/*
 	public void billing () throws Exception{
         System.out.println("Ingrese el numero de elementos");
         int items = invoiceValidator.validItem(Utils.getReader().nextLine());

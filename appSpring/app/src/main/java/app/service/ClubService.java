@@ -54,10 +54,8 @@ public class ClubService implements LoginService,AdminService,PartherService{
 		guestDto.getUserId().setPersonId(this.personDao.findByDocument(guestDto.getUserId().getPersonId()));
 		this.userDao.createUser(guestDto.getUserId());
 		UserDto userDto= userDao.findByUserName(guestDto.getUserId());
-                PartherDto parther = new PartherDto();
-                parther.setUserId(user);
                 guestDto.setUserId(userDto);
-                guestDto.setPartherId(this.partherDao.findByUserId(parther));
+                guestDto.setPartherId(this.partherDao.findById(guestDto.getPartherId()));
 		try {
 			
 			this.guestDao.createGuest(guestDto);

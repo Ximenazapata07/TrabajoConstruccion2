@@ -3,6 +3,7 @@ package app.controller;
 
 
 
+import app.controller.requests.CreateUserRequests;
 import java.sql.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,136 +14,87 @@ import app.controller.validator.UserValidator;
 import app.dto.PartherDto;
 import app.dto.PersonDto;
 import app.dto.UserDto;
-import app.service.ClubService;
+
 import app.service.interfaces.AdminService;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
+import org.springframework.web.bind.annotation.RestController;
 
 
-@Controller
+
+@RestController
 @NoArgsConstructor
 @Getter
 @Setter
 
 public class AdminController implements ControllerInterface {
-	@Autowired
-	private PersonValidator personValidator;
-	@Autowired 
-	private UserValidator userValidator;
-	@Autowired 
-	private AdminService service;
+    @Autowired
+    private PersonValidator personValidator;
+    @Autowired 
+    private UserValidator userValidator;
+    @Autowired 
+    private AdminService service;
 	
-	private static final String MENU ="ingrese la opcion que desea \n 1.para crear socio \n 2. visualización de facturas  \n 3. para promocion VIP \n  4. para cerrar sesion";
+    private static final String MENU ="ingrese la opcion que desea \n 1.para crear socio \n 2. visualización de facturas  \n 3. para promocion VIP \n  4. para cerrar sesion";
 
 	
 	@Override
 	public void session() throws Exception {
-		boolean session = true;
-		while (session) {
-			session= menu();
-		}
-	}
-	private boolean options(String option) throws Exception {
-		switch (option) {
-		case "1" :{
-			this.createParther();
-			return true;
-		}
-		case "2":{
-			//this.invoiceDisplay();
-			return true;
-		}
-		case"3":{
-			//this.createPromotion();
-			return true;
-		}
-		case"4":{
-			System.out.println("Se ha cerrado sesion");
-			return false;
-		}
-		default:{
-			System.out.println("Ingrese una opcion valida");
-			return true;
-		}
 		
-		}
-	}
-		
-	private boolean menu() {
-			try {
-				System.out.print(MENU);
-				String option= Utils.getReader().nextLine();
-				return options(option);
-				
-				
-			}catch (Exception e) {
-				System.out.println(e.getMessage());		
-				return true;
-				}	
-		}
-	private void createParther() throws Exception {
-		System.out.println("Ingrese el nombre del socio");
-		String name= Utils.getReader().nextLine();
-		personValidator.validName(name);
-		System.out.println("Ingrese la cedula del socio");
-		long document= personValidator.validDocument(Utils.getReader().nextLine());
-		System.out.println("Ingrese el numero de telefono del socio");
-		long cellnumber= personValidator.validCellnumber(Utils.getReader().nextLine());
-		
-		System.out.println("Ingrese el nombre de usuario del socio");
-		String userName= Utils.getReader().nextLine();
-		userValidator.validUserName(userName);
-		System.out.println("Ingrese la contraseña del socio");
-		String password= Utils.getReader().nextLine();
-		userValidator.validPassword(password);
-		
-		
-		
-		
-		PersonDto personDto = new PersonDto();
-		personDto.setName(name);
-		personDto.setDocument(document);
-		personDto.setCellnumber(cellnumber);
-		
-		UserDto userDto= new UserDto();
-		userDto.setRole("parther");
-		userDto.setPassword(password);
-		userDto.setUserName(userName);
-	
-		userDto.setPersonId(personDto);
-		PartherDto partherDto = new PartherDto();
-		partherDto.setMembersphipDate(new Date(System.currentTimeMillis()));
-		partherDto.setUserId(userDto);
-		partherDto.setAvailableFunds(50000);
-		partherDto.setSubscriptionType("regulares");
-		this.service.createParther(partherDto);
-		System.out.println("Se ha creado el usuario exitosamente");
-		
-	}
-	public PersonValidator getPersonValidator() {
-		return personValidator;
-	}
-	public void setPersonValidator(PersonValidator personValidator) {
-		this.personValidator = personValidator;
-	}
-	public UserValidator getUserValidator() {
-		return userValidator;
-	}
-	public void setUserValidator(UserValidator userValidator) {
-		this.userValidator = userValidator;
-	}
-	public AdminService getService() {
-		return service;
-	}
-	public void setService(AdminService service) {
-		this.service = service;
-	}
-	public static String getMenu() {
-		return MENU;
 	}
 	
+        @PostMapping("/partner")
+	private ResponseEntity createParther(@RequestBody CreateUserRequests request ) {
+            try{
+            String name = request.getName();
+            personValidator.validName(name);
+            long document= personValidator.validDocument(request.getDocument());
+            long cellnumber= personValidator.validCellnumber(request.getCellphone());
+            String userName = request.getUserName();
+            userValidator.validUserName(userName);
+            String password = request.getPassword();
+            userValidator.validPassword(password);
 	
+            PersonDto personDto = new PersonDto();
+            personDto.setName(name);
+            personDto.setDocument(document);
+            personDto.setCellnumber(cellnumber);
+		
+            UserDto userDto= new UserDto();
+            userDto.setRole("parther");
+            userDto.setPassword(password);
+            userDto.setUserName(userName);
+            userDto.setPersonId(personDto);
+            
+            PartherDto partherDto = new PartherDto();
+            partherDto.setMembersphipDate(new Date(System.currentTimeMillis()));
+            partherDto.setUserId(userDto);
+            partherDto.setAvailableFunds(50000);
+            partherDto.setSubscriptionType("regulares");
+            
+            this.service.createParther(partherDto);
+            return new ResponseEntity<>("Se ha creado el usuario exitosamente",HttpStatus.OK);
+            }catch (Exception e ){
+                return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+            }
+		
+	
+        }
+	
+	
+        @GetMapping("/")
+        
+        public String vive (){
+            return "vive";
+        }
+        
 		
 	}
 

@@ -10,10 +10,10 @@ import java.util.HashMap;
 
 import app.controller.validator.UserValidator;
 import app.dto.UserDto;
-import app.service.ClubService;
+
 import app.service.interfaces.LoginService;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
+
 import lombok.Setter;
 
 @Controller
