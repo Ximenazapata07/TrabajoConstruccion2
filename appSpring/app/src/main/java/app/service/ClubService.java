@@ -38,6 +38,7 @@ public class ClubService implements LoginService,AdminService,PartherService{
 	private UserDao userDao;
 	@Autowired
 	private PersonDao personDao;
+        @Autowired
 	private InvoiceDao invoiceDao;
 	@Autowired
 	private static UserDto user;
@@ -112,23 +113,21 @@ public class ClubService implements LoginService,AdminService,PartherService{
 		System.out.println("Se ha cerrado sesion");
 		
         }
-        /*
-    @Override
-    public void createInvoice(List<InvoiceDetailDto> invoices) throws Exception {
-        InvoiceDetailDto invoiceDetailDto = invoiceDao.findById(invoices.get(0).getInvoiceid().getPersonId());
-        if (invoiceDetailDto == null){
-            throw new Exception("La orden no existe ");
-            
-        }
-        
-    }
-    
-*/
 
     @Override
-    public void createInvoice(List<InvoiceDetailDto> invoices) throws Exception {
-       
+    public void createInvoice(InvoiceDto invoiceDto) throws Exception {
+       long invoiceId = this.invoiceDao.createInvoice(invoiceDto);
+        invoiceDto.setId(invoiceId);
+        
     }
+
+    
+    @Override
+    public void createInvoiceDetails(List<InvoiceDetailDto> invoiceDetails) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    
 	
 	
 }
