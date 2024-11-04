@@ -34,9 +34,10 @@ public class InvoiceDetail {
     @ManyToOne
     @JoinColumn(name="invoiceid")
     private Invoice invoiceid;
-    @Column(name="items")
+    @Column(name="item")
     private int item;
     @Column(name="amount")
     private double amount;
-    
+    @Column(name="description")
+    private String description;
 }

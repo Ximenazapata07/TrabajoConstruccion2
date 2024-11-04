@@ -35,28 +35,21 @@ import org.springframework.web.bind.annotation.RequestBody;
 @Getter
 @Setter
 public class PartherController implements ControllerInterface{
-	@Autowired
-	private PersonValidator personValidator;
-	@Autowired
-	private UserValidator userValidator;
-	@Autowired
-	private InvoiceValidator invoiceValidator;
-	@Autowired 
-	private PartherService service;
+    @Autowired
+    private PersonValidator personValidator;
+    @Autowired
+    private UserValidator userValidator;
+    @Autowired
+    private InvoiceValidator invoiceValidator;
+    @Autowired 
+    private PartherService service;
 	
 
 	
-	@Override 
-	public void session() throws Exception {
+    @Override 
+    public void session() throws Exception {
 	
-	}
-	
-
-
-	
-	
-	
-	
+    }
 	
 	//cosa que va en el service 
 	/*
@@ -68,95 +61,98 @@ public class PartherController implements ControllerInterface{
 	}
 	
 }*/     
-        @PostMapping("/guest")
-	private ResponseEntity createGuest(@RequestBody CreateGuestRequests requestGuest) {
+    @PostMapping("/guest")
+    private ResponseEntity createGuest(@RequestBody CreateGuestRequests requestGuest) {
             
-                try{
-		String name= requestGuest.getName();
-		personValidator.validName(name);
-		long document= personValidator.validDocument(requestGuest.getDocument());
-		long cellnumber= personValidator.validCellnumber(requestGuest.getCellphone());
+        try{
+	String name= requestGuest.getName();
+	personValidator.validName(name);
+	long document= personValidator.validDocument(requestGuest.getDocument());
+	long cellnumber= personValidator.validCellnumber(requestGuest.getCellphone());
 		
-		String userName=requestGuest.getUserName();
-		userValidator.validUserName(userName);
+	String userName=requestGuest.getUserName();
+        userValidator.validUserName(userName);
 		
-		String password=requestGuest.getPassword();
-		userValidator.validPassword(password);
+	String password=requestGuest.getPassword();
+	userValidator.validPassword(password);
 		
 		
-		PersonDto personDto =new PersonDto();
-		personDto.setName(userName);
-		personDto.setDocument(document);
-		personDto.setCellnumber(cellnumber);
+	PersonDto personDto =new PersonDto();
+	personDto.setName(userName);
+	personDto.setDocument(document);
+	personDto.setCellnumber(cellnumber);
 		  
 		
 		
-		UserDto userDto = new UserDto();
-		userDto.setRole("guest");
-		userDto.setPersonId(personDto);
-		userDto.setUserName(userName);
-		userDto.setPassword(password);
+	UserDto userDto = new UserDto();
+	userDto.setRole("guest");
+	userDto.setPersonId(personDto);
+	userDto.setUserName(userName);
+	userDto.setPassword(password);
 		
 		
-		GuestDto guestDto = new GuestDto();
-		guestDto.setGuestStatus(true);
-		guestDto.setUserId(userDto);
+	GuestDto guestDto = new GuestDto();
+	guestDto.setGuestStatus(true);
+	guestDto.setUserId(userDto);
                 
-                PartherDto partherDto = new PartherDto();
-                partherDto.setId(personValidator.isValidLong("Id del socio", requestGuest.getPartherId()));
-                guestDto.setPartherId(partherDto);
+        PartherDto partherDto = new PartherDto();
+        partherDto.setId(personValidator.isValidLong("Id del socio", requestGuest.getPartherId()));
+        guestDto.setPartherId(partherDto);
                 
                 
                 
 	
-		this.service.createGuest(guestDto);
-		return new ResponseEntity<>("Se ha creado el invitado exitosamente",HttpStatus.OK);
-                }catch (Exception e){
-                    return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
-                }
+	this.service.createGuest(guestDto);
+	return new ResponseEntity<>("Se ha creado el invitado exitosamente",HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+        }
 		
 		
 		
 	}
 	
-        @PostMapping("/billing")
-	public ResponseEntity billing(@RequestBody CreateInvoiceRequest invoiceRequest) throws Exception {
-            InvoiceDto invoiceDto = new InvoiceDto();
-            invoiceDto.setConsumptionDate(new Date(System.currentTimeMillis()));
+    @PostMapping("/billing")
+    public ResponseEntity billing(@RequestBody CreateInvoiceRequest invoiceRequest) throws Exception {
+        InvoiceDto invoiceDto = new InvoiceDto();
+        invoiceDto.setConsumptionDate(new Date(System.currentTimeMillis()));
 		
-            PartherDto partherDto = new PartherDto();
-            partherDto.setId(personValidator.isValidLong("Id del socio", invoiceRequest.getPartherId()));
-            invoiceDto.setPartherId(partherDto);
+        PartherDto partherDto = new PartherDto();
+        partherDto.setId(personValidator.isValidLong("Id del socio", invoiceRequest.getPartherId()));
+        invoiceDto.setPartherId(partherDto);
 		
-            PersonDto personDto = new PersonDto();
-            personDto.setId(personValidator.isValidLong("Id de la persona", invoiceRequest.getPersonId()));
-            invoiceDto.setPersonId(personDto);
+        PersonDto personDto = new PersonDto();
+        personDto.setId(personValidator.isValidLong("Id de la persona", invoiceRequest.getPersonId()));
+        invoiceDto.setPersonId(personDto);
 		
 		// falta validador del total 
            
-            invoiceDto.setTotal(Double.parseDouble(invoiceRequest.getTotal()));
+                    invoiceDto.setTotal(Double.parseDouble(invoiceRequest.getTotal()));
 		
-            service.createInvoice(invoiceDto);
+        service.createInvoice(invoiceDto);
 		
-            int detailsCount = 0;
-            List<InvoiceDetailDto> invoiceDetails = new ArrayList<InvoiceDetailDto>();
-		
-            for(CreateInvoiceDetailRequest invoiceDetailRequest: invoiceRequest.getDetails()) {
+        int detailsCount = 0;
+        List<InvoiceDetailDto> invoiceDetails = new ArrayList<InvoiceDetailDto>();
+	
+        for (CreateInvoiceDetailRequest invoiceDetailRequest : invoiceRequest.getDetails()) {
+            try {
                 InvoiceDetailDto invoiceDetailDto = new InvoiceDetailDto();
                 invoiceDetailDto.setAmount(Double.parseDouble(invoiceDetailRequest.getAmount()));
                 invoiceDetailDto.setDescription(invoiceDetailRequest.getDescription());
                 invoiceDetailDto.setItem(++detailsCount);
-                invoiceDetails.add(invoiceDetailDto);
                 invoiceDetailDto.setInvoiceid(invoiceDto);
-		}
-		
-            service.createInvoiceDetails(invoiceDetails);
-		
-            return new ResponseEntity<>("Se ha creado la factura exitosamente", HttpStatus.OK);
-		
-	}
-        }     
-		
+                invoiceDetails.add(invoiceDetailDto);
+            } catch (Exception e) {
+                return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            }
+            }
+
+service.createInvoiceDetails(invoiceDetails);
+
+return new ResponseEntity<>("Se ha creado la factura exitosamente", HttpStatus.OK);
+
+        }
+}		
 	
 	
 

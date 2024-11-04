@@ -119,6 +119,7 @@ public class ClubService implements LoginService,AdminService,PartherService{
 
     @Override
     public void createInvoice(InvoiceDto invoiceDto) throws Exception {
+       invoiceDto.setPartherId(this.partherDao.findById(invoiceDto.getPartherId()));
        InvoiceDto invoiceDto2 = this.invoiceDao.createInvoice(invoiceDto);
        invoiceDto.setId(invoiceDto2.getId());
         

@@ -103,6 +103,7 @@ public abstract class Helper {
             invoice.setPartherId(parse(invoiceDto.getPartherId()));
             invoice.setPersonId(parse(invoiceDto.getPersonId()));
             invoice.setTotal(invoiceDto.getTotal());
+            invoice.setId(invoiceDto.getId());
             return invoice;
             
         }
@@ -122,6 +123,9 @@ public abstract class Helper {
             invoiceDetail.setItem(invoiceDetailDto.getItem());
             invoiceDetail.setAmount(invoiceDetailDto.getAmount());
             invoiceDetail.setInvoiceid(parse(invoiceDetailDto.getInvoiceid()));
+            invoiceDetail.setDescription(invoiceDetailDto.getDescription());
+            invoiceDetail.setInvoiceid(Helper.parse(invoiceDetailDto.getInvoiceid()));
+            invoiceDetail.setId(invoiceDetailDto.getId());
             return invoiceDetail;
           
         }
@@ -132,6 +136,7 @@ public abstract class Helper {
             invoiceDetailDto.setAmount(invoiceDetail.getAmount());
             invoiceDetailDto.setInvoiceid(parse(invoiceDetail.getInvoiceid()));
             invoiceDetailDto.setId(invoiceDetail.getId());
+            invoiceDetailDto.setDescription(invoiceDetail.getDescription());
             return invoiceDetailDto;
         }
 }
