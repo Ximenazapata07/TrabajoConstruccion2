@@ -1,9 +1,13 @@
 package app.helpers;
 import app.dto.GuestDto;
+import app.dto.InvoiceDetailDto;
+import app.dto.InvoiceDto;
 import app.dto.PartherDto;
 import app.dto.PersonDto;
 import app.dto.UserDto;
 import app.model.Guest;
+import app.model.Invoice;
+import app.model.InvoiceDetail;
 import app.model.Parther;
 import app.model.Person;
 import app.model.User;
@@ -93,5 +97,41 @@ public abstract class Helper {
 		
 	}
         
+        public static Invoice parse(InvoiceDto invoiceDto){
+            Invoice invoice = new Invoice();
+            invoice.setConsumptionDate(invoiceDto.getConsumptionDate());
+            invoice.setPartherId(parse(invoiceDto.getPartherId()));
+            invoice.setPersonId(parse(invoiceDto.getPersonId()));
+            invoice.setTotal(invoiceDto.getTotal());
+            return invoice;
+            
+        }
         
+        public static InvoiceDto parse (Invoice invoice){
+            InvoiceDto invoiceDto = new InvoiceDto();
+            invoiceDto.setConsumptionDate(invoice.getConsumptionDate());
+            invoiceDto.setPartherId(parse(invoice.getPartherId()));
+            invoiceDto.setPersonId(parse(invoice.getPersonId()));
+            invoiceDto.setTotal(invoice.getTotal());
+            invoiceDto.setId(invoice.getId());
+            return invoiceDto;
+        }
+        
+        public static InvoiceDetail parse (InvoiceDetailDto invoiceDetailDto){
+            InvoiceDetail invoiceDetail = new InvoiceDetail();
+            invoiceDetail.setItem(invoiceDetailDto.getItem());
+            invoiceDetail.setAmount(invoiceDetailDto.getAmount());
+            invoiceDetail.setInvoiceid(parse(invoiceDetailDto.getInvoiceid()));
+            return invoiceDetail;
+          
+        }
+        
+        public static InvoiceDetailDto parse(InvoiceDetail invoiceDetail){
+            InvoiceDetailDto invoiceDetailDto = new InvoiceDetailDto();
+            invoiceDetailDto.setItem(invoiceDetail.getItem());
+            invoiceDetailDto.setAmount(invoiceDetail.getAmount());
+            invoiceDetailDto.setInvoiceid(parse(invoiceDetail.getInvoiceid()));
+            invoiceDetailDto.setId(invoiceDetail.getId());
+            return invoiceDetailDto;
+        }
 }

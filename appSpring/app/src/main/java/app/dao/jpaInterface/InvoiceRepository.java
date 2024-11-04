@@ -4,9 +4,8 @@
  */
 package app.dao.jpaInterface;
 
-import app.dto.InvoiceDto;
-import app.model.Invoice;
 
+import app.model.Invoice;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -15,10 +14,6 @@ import org.springframework.stereotype.Repository;
  * @author ximez
  */
 @Repository
-public interface InvoiceRepository extends JpaRepository<InvoiceDto, Long>{
-
-    public void save(Invoice invoices);
-
-    
+public interface InvoiceRepository extends JpaRepository<Invoice, Long>{    
     
 }

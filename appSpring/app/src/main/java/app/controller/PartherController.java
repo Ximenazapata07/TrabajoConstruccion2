@@ -132,7 +132,7 @@ public class PartherController implements ControllerInterface{
             personDto.setId(personValidator.isValidLong("Id de la persona", invoiceRequest.getPersonId()));
             invoiceDto.setPersonId(personDto);
 		
-		// acá se debe agregar algún validador para el total
+		// falta validador del total 
            
             invoiceDto.setTotal(Double.parseDouble(invoiceRequest.getTotal()));
 		

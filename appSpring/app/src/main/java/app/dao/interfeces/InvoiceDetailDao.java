@@ -11,5 +11,5 @@ import app.dto.InvoiceDetailDto;
  * @author ximez
  */
 public interface InvoiceDetailDao {
-    public void createInvoiceDetail(InvoiceDetailDto invoiceDetailDto) throws Exception;
+    public InvoiceDetailDto createInvoiceDetail(InvoiceDetailDto invoiceDetailDto) throws Exception;
 }

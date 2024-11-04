@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import app.dao.interfeces.GuestDao;
 import app.dao.interfeces.InvoiceDao;
+import app.dao.interfeces.InvoiceDetailDao;
 import app.dao.interfeces.PartherDao;
 import app.dao.interfeces.PersonDao;
 import app.dao.interfeces.UserDao;
@@ -40,6 +41,8 @@ public class ClubService implements LoginService,AdminService,PartherService{
 	private PersonDao personDao;
         @Autowired
 	private InvoiceDao invoiceDao;
+        @Autowired
+        private InvoiceDetailDao invoiceDetailDao;
 	@Autowired
 	private static UserDto user;
 	@Autowired
@@ -116,18 +119,16 @@ public class ClubService implements LoginService,AdminService,PartherService{
 
     @Override
     public void createInvoice(InvoiceDto invoiceDto) throws Exception {
-       long invoiceId = this.invoiceDao.createInvoice(invoiceDto);
-        invoiceDto.setId(invoiceId);
+       InvoiceDto invoiceDto2 = this.invoiceDao.createInvoice(invoiceDto);
+       invoiceDto.setId(invoiceDto2.getId());
         
     }
 
-    
     @Override
-    public void createInvoiceDetails(List<InvoiceDetailDto> invoiceDetails) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public void createInvoiceDetails(List<InvoiceDetailDto> invoiceDetails) throws Exception {
+       for (InvoiceDetailDto invoiceDetailDto: invoiceDetails){
+            this.invoiceDetailDao.createInvoiceDetail(invoiceDetailDto);
     }
-
-    
 	
-	
+}
 }
